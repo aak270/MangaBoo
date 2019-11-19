@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MangaBoo</string>
+    <string-array name="navigation_row">
+        <item>Connect</item>
+        <item>Fixtures</item>
+        <item>Table</item>
+    </string-array>
+</resources>
