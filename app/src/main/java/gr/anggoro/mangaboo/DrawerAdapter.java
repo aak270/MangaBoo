@@ -6,22 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
-
 public class DrawerAdapter extends ArrayAdapter<NavItemModel> {
-    Context mContext;
-    int layoutResourceId;
-    NavItemModel[] items = null;
+    private Context context;
+    private int layoutResourceId;
+    private NavItemModel[] items;
 
-    public DrawerAdapter(Context mContext, int layoutResourceId, NavItemModel[] items){
+    DrawerAdapter(Context mContext, int layoutResourceId, NavItemModel[] items){
         super(mContext, layoutResourceId, items);
-        this.mContext = mContext;
+        this.context = mContext;
         this.layoutResourceId = layoutResourceId;
         this.items = items;
     }
@@ -29,7 +26,7 @@ public class DrawerAdapter extends ArrayAdapter<NavItemModel> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         View listItem = inflater.inflate(layoutResourceId, parent, false);
 
         TextView textView = listItem.findViewById((R.id.textViewName));
