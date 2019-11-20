@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView drawerList;
 
     private CharSequence title;
-    private CharSequence drawerTitle;
 
     Toolbar toolbar;
     ActionBarDrawerToggle drawerToggle;
@@ -31,19 +30,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_library);
+        setContentView(R.layout.activity_main);
 
-        title = drawerTitle = getTitle();
+        title = getTitle();
         navItemTitles = getResources().getStringArray(R.array.navigation_row);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerList = findViewById(R.id.left_drawer);
 
         setupToolbar();
 
-        NavItemModel[] items = new NavItemModel[3];
-        items[0] = new NavItemModel("Connect");
-        items[1] = new NavItemModel("Fixtures");
-        items[2] = new NavItemModel("Table");
+        NavItemModel[] items = new NavItemModel[navItemTitles.length];
+        for(int i = 0; i < items.length; i++){
+            items[i] = new NavItemModel(navItemTitles[i]);
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -54,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.addDrawerListener(drawerToggle);
         setupDrawerToggle();
+
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content_frame, new FragmentControl(1)).commit();
+
+        drawerList.setItemChecked(1, true);
+        drawerList.setSelection(1);
+
+        setTitle(navItemTitles[1]);
+        drawerLayout.closeDrawer(drawerList);
     }
 
     @Override
@@ -95,33 +104,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectItem(int position) {
-        Fragment fragment;
-        switch (position){
-            case 0:
-                fragment = new ConnectFragment();
-                break;
-            case 1:
-                fragment = new ConnectFragment();
-                break;
-            case 2:
-                fragment = new ConnectFragment();
-                break;
-            default:
-                fragment = null;
-                break;
-        }
+        Fragment fragment = (position == 0) ? new MangaListFragment() : new FragmentControl(position);
 
-        if(fragment != null){
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-            drawerList.setItemChecked(position, true);
-            drawerList.setSelection(position);
+        drawerList.setItemChecked(position, true);
+        drawerList.setSelection(position);
 
-            setTitle(navItemTitles[position]);
-            drawerLayout.closeDrawer(drawerList);
-        }else{
-            Log.e("MainActivity", "Error in creating fragment");
-        }
+        setTitle(navItemTitles[position]);
+        drawerLayout.closeDrawer(drawerList);
     }
 }
